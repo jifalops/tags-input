@@ -5,7 +5,7 @@ Input element for defining one or more tags.
 
 ## Installation
 ```
-bower install --save tags-input
+bower install --save jifalops/tags-input
 ```
 
 <!-- ## Usage -->

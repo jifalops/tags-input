@@ -1,7 +1,19 @@
 {
   "name": "tags-input",
   "description": "Input element for defining one or more tags.",
-  "main": "tags-input.html",
+  "authors": [ "Jacob Phillips (https://github.com/jifalops)" ],
+  "license": "MIT",
+  "homepage": "https://github.com/jifalops/tags-input",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jifalops/tags-input"
+  },
+  "keywords": [
+    "web-components",
+    "tag",
+    "tags",
+    "input"
+  ],
   "dependencies": {
     "polymer": "^1.8.1",
     "iron-icon": "^1.0.12",
@@ -13,5 +25,6 @@
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
-  }
+  },
+  "main": "tags-input.html",
 }

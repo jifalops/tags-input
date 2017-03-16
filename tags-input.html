@@ -1,0 +1,215 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="tag-iconset.html">
+<link rel="import" href="tag-input.html">
+
+<!--
+`tags-input`
+Input element for defining one or more tags.
+
+@demo demo/index.html
+-->
+
+<dom-module id="tags-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 200px;
+        border: 1px solid #333;
+        padding: 4px;
+      }
+      #container {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        @apply --layout-wrap;
+        @apply --tags-container;
+      }
+      .tag, tag-input {
+        padding: 1px 2px;
+        margin: 2px;
+      }
+      .tag {
+        border: 1px solid #999;
+        @apply --tags-existing-tag;
+      }
+      tag-input {
+
+      }
+      iron-icon {
+        --iron-icon-height: var(--tags-remove-icon-size, 12px);
+        --iron-icon-width: var(--tags-remove-icon-size, 12px);
+        @apply --tags-remove-icon;
+      }
+    </style>
+    <div id="container">
+      <!-- <div id="tags"> -->
+        <template is="dom-repeat" items="[[tags]]" as="tag">
+          <!-- <tag-input tag="{{item}}" already-added separator="[[separator]]" on-remove-tag="_onRemoveTag"></tag-input> -->
+          <div class="tag">
+            <span>[[tag]]</span>
+            <iron-icon
+              tabindex="0"
+              hidden$="[[!editable]]"
+              icon="tag:remove"
+              on-keydown="_onRemoveKeydown"
+              on-tap="_removeTag">
+            </iron-icon>
+          </div>
+        </template>
+      <!-- </div> -->
+      <tag-input
+        id="input"
+        hidden$="[[!editable]]"
+        label="[[label]]"
+        autofocus="[[autofocus]]"
+        separator="[[separator]]"
+        on-tag-ready="_onTagReady">
+      </tag-input>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'tags-input',
+
+      hostAttributes: {
+        tabindex: 0
+      },
+
+      properties: {
+        /**
+         * The current set of tags.
+         */
+        tags: {
+          type: Array,
+          value: function() { return [] },
+          notify: true
+        },
+        /**
+         * The character to use as a separator.
+         * The default behavior is to use whitespace characters and escape.
+         */
+        separator: String,
+
+        /**
+         * Whether tags can be added and removed.
+         */
+        editable: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * Bound to the input's `autofocus` attribute.
+         */
+        autofocus: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * Whether tags must be unique.
+         */
+        unique: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * The label/placeholder for the internal input.
+         */
+        label: {
+          type: String,
+          value: 'tag'
+        },
+      },
+
+      /**
+       * Add a tag to the internal array.
+       */
+      add: function(tag) {
+        if (!this.unique || !this.tags.includes(tag)) {
+          this.push('tags', tag);
+          this.fire('tag-added', tag);
+          return true;
+        } else {
+          this.fire('tag-denied', tag);
+          return false;
+        }
+      },
+
+      /**
+       * Remove a tag by index.
+       */
+      remove: function(index) {
+        var removed = this.splice('tags', index, 1);
+        if (removed.length > 0) this.fire('tag-removed', removed[0]);
+      },
+
+      /**
+       * Insert tag at index.
+       */
+      insert: function(index, tag) {
+        if (!this.unique || !this.tags.includes(tag)) {
+          this.splice('tags', index, 0, tag);
+          this.fire('tag-inserted', tag);
+          return true;
+        } else {
+          this.fire('tag-denied', tag);
+          return false;
+        }
+      },
+
+      /**
+       * Give focus to the underlying input.
+       */
+      focus: function() {
+        this.$.input.$.input.focus();
+      },
+
+      _removeTag: function(e) {
+        // console.log('onremove', e, tag);
+        this.remove(e.model.index);
+        this.focus();
+      },
+
+
+      _onTagReady: function(e, tag) {
+        // console.log('onadd', e, tag);
+        this.$.input.tag = this.add(tag) ? '' : tag.trim();
+        this.focus();
+      },
+
+      _onRemoveKeydown: function(e) {
+        if (e.keyCode === 13 || e.keyCode === 32) {  // enter or space
+          this._removeTag(e);
+        }
+      }
+
+
+      /**
+       * Triggered when a tag was added.
+       * @event tag-added
+       * @param {tag} string The tag that was added.
+       */
+
+      /**
+       * Triggered when adding or inserting a duplicate tag fails because `unique` is true.
+       * @event tag-denied
+       * @param {tag} string The tag that was denied.
+       */
+
+      /**
+       * Triggered when a tag was inserted.
+       * @event tag-inserted
+       * @param {tag} string The tag that was inserted.
+       */
+
+       /**
+        * Triggered when a tag was removed.
+        * @event tag-removed
+        * @param {tag} string The tag that was removed.
+        */
+    });
+  </script>
+</dom-module>

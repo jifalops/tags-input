@@ -1,0 +1,91 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-input/iron-input.html">
+
+<!--
+`tags-input`
+The HTML input wrapper for defining a tag.
+
+@demo demo/index.html
+-->
+
+<dom-module id="tag-input">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+      #input {
+        min-width: 1.5em;
+        width: 1.5em;
+        @apply --tag-input;
+      }
+    </style>
+    <input
+      id="input"
+      autofocus$="[[autofocus]]"
+      placeholder="[[label]]"
+      value="{{tag::input}}"
+      on-keydown="_onKeydown"/>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'tag-input',
+
+      properties: {
+        /**
+         * The HTML input's value.
+         */
+        tag: {
+          type: String,
+          notify: true,
+          observer: '_tagChanged'
+        },
+        /**
+         * The character to use as a separator.
+         * The default behavior is to use whitespace characters and escape.
+         */
+        separator: String,
+        /**
+         * The label/placeholder for the internal input.
+         */
+        label: String,
+        /**
+         * Bound to the input's `autofocus` attribute.
+         */
+        autofocus: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+
+      _tagChanged: function(tag) {
+        if (tag) this.$.input.style.width = (tag.length * 0.75) + 'em';
+      },
+
+      _onKeydown: function (e) {
+        // console.log('keydown:', e.key, e.keyCode, this._separatorKeyCode);
+        if ((this.separator && this.separator === e.key)
+          || (!this.separator
+            && (e.keyCode === 9         // tab
+              || e.keyCode === 13       // enter
+              || e.keyCode === 19       // pause/break
+              || e.keyCode === 27       // esc
+              || e.keyCode === 32))) {  // space
+          var tag = this.tag.trim();
+          if (tag) {
+            e.preventDefault();
+            this.fire('tag-ready', tag);
+          }
+        }
+      }
+
+      /**
+       * Triggered when a separator key is pressed.
+       * @event tag-ready
+       * @param {tag} string The tag ready to be added.
+       */
+    });
+  </script>
+</dom-module>

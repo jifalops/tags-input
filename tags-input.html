@@ -1,12 +1,21 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="tag-iconset.html">
-<link rel="import" href="tag-input.html">
 
 <!--
 `tags-input`
 Input element for defining one or more tags.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--tags-container` | Mixin for the overall container | `@apply --layout-vertical;`
+`--tags-input` | Mixin for the paper-input | ``
+`--tags-existing-tag` | Mixin for the each existing tag | ``
+`--tags-remove-icon-size` | Hight and width of the remove icon | `12px`
+`--tags-remove-icon` | Mixin applied to the icon | ``
 
 @demo demo/index.html
 -->
@@ -16,26 +25,24 @@ Input element for defining one or more tags.
     <style>
       :host {
         display: block;
-        width: 200px;
-        border: 1px solid #333;
-        padding: 4px;
       }
-      #container {
+      .container {
+        @apply --layout-vertical;
+        @apply --tags-container;
+      }
+      .tags {
         @apply --layout-horizontal;
         @apply --layout-center;
         @apply --layout-wrap;
-        @apply --tags-container;
-      }
-      .tag, tag-input {
-        padding: 1px 2px;
-        margin: 2px;
       }
       .tag {
+        padding: 1px 2px;
+        margin: 2px;
         border: 1px solid #999;
         @apply --tags-existing-tag;
       }
-      tag-input {
-
+      #input {
+        @apply --tags-input;
       }
       iron-icon {
         --iron-icon-height: var(--tags-remove-icon-size, 12px);
@@ -43,10 +50,9 @@ Input element for defining one or more tags.
         @apply --tags-remove-icon;
       }
     </style>
-    <div id="container">
-      <!-- <div id="tags"> -->
+    <div class="container">
+      <div class="tags">
         <template is="dom-repeat" items="[[tags]]" as="tag">
-          <!-- <tag-input tag="{{item}}" already-added separator="[[separator]]" on-remove-tag="_onRemoveTag"></tag-input> -->
           <div class="tag">
             <span>[[tag]]</span>
             <iron-icon
@@ -58,15 +64,18 @@ Input element for defining one or more tags.
             </iron-icon>
           </div>
         </template>
-      <!-- </div> -->
-      <tag-input
+      </div>
+      <paper-input
         id="input"
         hidden$="[[!editable]]"
+        no-label-float
         label="[[label]]"
-        autofocus="[[autofocus]]"
-        separator="[[separator]]"
-        on-tag-ready="_onTagReady">
-      </tag-input>
+        autofocus$="[[autofocus]]"
+        minlength="[[minLength]]"
+        maxlength="[[maxLength]]"
+        on-keydown="_onInputKeydown"
+        value="{{tag}}">
+      </paper-input>
     </div>
   </template>
 
@@ -75,9 +84,9 @@ Input element for defining one or more tags.
 
       is: 'tags-input',
 
-      hostAttributes: {
-        tabindex: 0
-      },
+      // hostAttributes: {
+      //   tabindex: 0
+      // },
 
       properties: {
         /**
@@ -116,23 +125,32 @@ Input element for defining one or more tags.
           value: false
         },
         /**
-         * The label/placeholder for the internal input.
+         * The paper-input-container's label.
          */
-        label: {
-          type: String,
-          value: 'tag'
-        },
+        label: String,
+        /**
+         * The minimum length of a tag.
+         */
+        minLength: Number,
+        /**
+         * The maximum length of a tag.
+         */
+        maxLength: Number,
       },
 
       /**
        * Add a tag to the internal array.
        */
       add: function(tag) {
-        if (!this.unique || !this.tags.includes(tag)) {
+        if (tag
+            && (!this.minLength || tag.length >= this.minLength)
+            && (!this.maxLength || tag.length <= this.maxLength)
+            && (!this.unique || !this.tags.includes(tag))) {
           this.push('tags', tag);
           this.fire('tag-added', tag);
           return true;
         } else {
+          if (this.tag == tag) this.$.input.invalid = true;
           this.fire('tag-denied', tag);
           return false;
         }
@@ -174,15 +192,29 @@ Input element for defining one or more tags.
       },
 
 
-      _onTagReady: function(e, tag) {
-        // console.log('onadd', e, tag);
-        this.$.input.tag = this.add(tag) ? '' : tag.trim();
-        this.focus();
-      },
-
       _onRemoveKeydown: function(e) {
         if (e.keyCode === 13 || e.keyCode === 32) {  // enter or space
           this._removeTag(e);
+        }
+      },
+
+      _onInputKeydown: function (e) {
+        // console.log('keydown:', e.key, e.keyCode, this._separatorKeyCode);
+        this.$.input.invalid = false;
+        if ((this.separator && this.separator === e.key)
+          || (!this.separator
+            && (e.keyCode === 9         // tab
+              || e.keyCode === 13       // enter
+              || e.keyCode === 19       // pause/break
+              || e.keyCode === 27       // esc
+              || e.keyCode === 32))) {  // space
+          var tag = this.tag.trim();
+          if (tag) {
+            e.preventDefault();
+            // console.log('onadd', e, tag);
+            this.tag = this.add(tag) ? '' : tag.trim();
+            this.focus();
+          }
         }
       }
 

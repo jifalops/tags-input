@@ -20,7 +20,8 @@
       <h3>Default usage</h3>
       <demo-snippet>
         <template>
-          <tags-input autofocus editable unique></tags-input>
+          <tags-input autofocus editable unique label="Add tag"
+            min-length="3" max-length="16"></tags-input>
         </template>
       </demo-snippet>
 
@@ -50,7 +51,7 @@
                 color: white;
               };
               --tags-remove-icon-size: 16px;
-              --tag-input: {
+              --tags-input: {
                 background-color: yellow;
               };
             }

@@ -18,14 +18,14 @@ bower install --save jifalops/tags-input
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="tags-input.html">
-    <next-code-block></next-code-block>    
+    <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 
 ```html
-<tags-input autofocus editable unique></tags-input>
+<tags-input autofocus label="Tags"></tags-input>
 ```
 
 Full demo:

@@ -20,7 +20,7 @@
       <h3>Default usage</h3>
       <demo-snippet>
         <template>
-          <tags-input autofocus editable unique label="Add tag"
+          <tags-input autofocus label="Tags" tag-label="Add tag"
             min-length="3" max-length="16"></tags-input>
         </template>
       </demo-snippet>
@@ -28,7 +28,7 @@
       <h3>Allow duplicates</h3>
       <demo-snippet>
         <template>
-          <tags-input editable></tags-input>
+          <tags-input allow-duplicates></tags-input>
         </template>
       </demo-snippet>
 
@@ -56,14 +56,14 @@
               };
             }
           </style>
-          <tags-input editable unique class="styled"></tags-input>
+          <tags-input class="styled"></tags-input>
         </template>
       </demo-snippet>
 
       <h3>Events</h3>
       <demo-snippet>
         <template>
-          <tags-input id="events" editable unique></tags-input>
+          <tags-input id="events"></tags-input>
           <div>Last event:</div>
           <div id="feedback"></div>
           <script>
@@ -89,7 +89,17 @@
       <h3>Comma delimited</h3>
       <demo-snippet>
         <template>
-          <tags-input autofocus editable unique separator=","></tags-input>
+          <tags-input separator=","></tags-input>
+        </template>
+      </demo-snippet>
+
+      <h3>Not editable</h3>
+      <demo-snippet>
+        <template>
+          <tags-input id="noEdit" no-edit></tags-input>
+          <script>
+            document.getElementById('noEdit').tags = ['tag1', 'tag2', 'tag3'];
+          </script>
         </template>
       </demo-snippet>
     </div>

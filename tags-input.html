@@ -57,7 +57,7 @@ Custom property | Description | Default
             <span>[[tag]]</span>
             <iron-icon
               tabindex="0"
-              hidden$="[[!editable]]"
+              hidden$="[[noEdit]]"
               icon="tag:remove"
               on-keydown="_onRemoveKeydown"
               on-tap="_removeTag">
@@ -67,9 +67,9 @@ Custom property | Description | Default
       </div>
       <paper-input
         id="input"
-        hidden$="[[!editable]]"
+        hidden$="[[noEdit]]"
         no-label-float
-        label="[[label]]"
+        label="[[_label]]"
         autofocus$="[[autofocus]]"
         minlength="[[minLength]]"
         maxlength="[[maxLength]]"
@@ -106,7 +106,7 @@ Custom property | Description | Default
         /**
          * Whether tags can be added and removed.
          */
-        editable: {
+        noEdit: {
           type: Boolean,
           value: false
         },
@@ -120,14 +120,18 @@ Custom property | Description | Default
         /**
          * Whether tags must be unique.
          */
-        unique: {
+        allowDuplicates: {
           type: Boolean,
           value: false
         },
         /**
-         * The paper-input-container's label.
+         * The paper-input-container's label when there are no tags.
          */
         label: String,
+        /**
+         * The paper-input-container's label.
+         */
+        tagLabel: String,
         /**
          * The minimum length of a tag.
          */
@@ -136,6 +140,10 @@ Custom property | Description | Default
          * The maximum length of a tag.
          */
         maxLength: Number,
+        _label: {
+          type: String,
+          computed: '_computeLabel(label, tagLabel, tags.length)'
+        }
       },
 
       /**
@@ -145,7 +153,7 @@ Custom property | Description | Default
         if (tag
             && (!this.minLength || tag.length >= this.minLength)
             && (!this.maxLength || tag.length <= this.maxLength)
-            && (!this.unique || !this.tags.includes(tag))) {
+            && (this.allowDuplicates || !this.tags.includes(tag))) {
           this.push('tags', tag);
           this.fire('tag-added', tag);
           return true;
@@ -168,11 +176,15 @@ Custom property | Description | Default
        * Insert tag at index.
        */
       insert: function(index, tag) {
-        if (!this.unique || !this.tags.includes(tag)) {
+        if (tag
+            && (!this.minLength || tag.length >= this.minLength)
+            && (!this.maxLength || tag.length <= this.maxLength)
+            && (this.allowDuplicates || !this.tags.includes(tag))) {
           this.splice('tags', index, 0, tag);
           this.fire('tag-inserted', tag);
           return true;
         } else {
+          if (this.tag == tag) this.$.input.invalid = true;
           this.fire('tag-denied', tag);
           return false;
         }
@@ -216,6 +228,10 @@ Custom property | Description | Default
             this.focus();
           }
         }
+      },
+
+      _computeLabel: function(label, tagLabel, len) {
+        return len == 0 ? (label || tagLabel) : tagLabel;
       }
 
 
@@ -226,7 +242,7 @@ Custom property | Description | Default
        */
 
       /**
-       * Triggered when adding or inserting a duplicate tag fails because `unique` is true.
+       * Triggered when adding or inserting a duplicate tag fails because `allowDuplicates` is false.
        * @event tag-denied
        * @param {tag} string The tag that was denied.
        */

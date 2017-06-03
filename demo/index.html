@@ -12,8 +12,9 @@
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../tags-input.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles">
-    </style>
+    <custom-style>
+      <style include="demo-pages-shared-styles"></style>
+    </custom-style>
   </head>
   <body>
     <div class="vertical-section-container centered">
@@ -35,7 +36,8 @@
       <h3>Styling</h3>
       <demo-snippet>
         <template>
-          <style is="custom-style">
+          <custom-style>
+          <style>
             tags-input.styled {
               width: 400px;
               border: 1px solid red;
@@ -56,6 +58,7 @@
               };
             }
           </style>
+          </custom-style>
           <tags-input class="styled"></tags-input>
         </template>
       </demo-snippet>

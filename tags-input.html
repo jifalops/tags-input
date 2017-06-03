@@ -80,137 +80,141 @@ Custom property | Description | Default
   </template>
 
   <script>
-    Polymer({
+    class TagsInput extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'tags-input'; }
+      static get properties() {
+        return {
+          /**
+          * The current set of tags.
+          */
+          tags: {
+            type: Array,
+            value() { return [] },
+            notify: true
+          },
+          /**
+          * The character to use as a separator.
+          * The default behavior is to use whitespace characters and escape.
+          */
+          separator: String,
 
-      is: 'tags-input',
+          /**
+          * Whether tags can be added and removed.
+          */
+          noEdit: {
+            type: Boolean,
+            value: false
+          },
+          /**
+          * Bound to the input's `autofocus` attribute.
+          */
+          autofocus: {
+            type: Boolean,
+            value: false
+          },
+          /**
+          * Whether tags must be unique.
+          */
+          allowDuplicates: {
+            type: Boolean,
+            value: false
+          },
+          /**
+          * The paper-input-container's label when there are no tags.
+          */
+          label: String,
+          /**
+          * The paper-input-container's label.
+          */
+          tagLabel: String,
+          /**
+          * The minimum length of a tag.
+          */
+          minLength: Number,
+          /**
+          * The maximum length of a tag.
+          */
+          maxLength: Number,
+          _label: {
+            type: String,
+            computed: '_computeLabel(label, tagLabel, tags.length)'
+          }
+        };
+      }
 
-      // hostAttributes: {
-      //   tabindex: 0
-      // },
-
-      properties: {
-        /**
-         * The current set of tags.
-         */
-        tags: {
-          type: Array,
-          value: function() { return [] },
-          notify: true
-        },
-        /**
-         * The character to use as a separator.
-         * The default behavior is to use whitespace characters and escape.
-         */
-        separator: String,
-
-        /**
-         * Whether tags can be added and removed.
-         */
-        noEdit: {
-          type: Boolean,
-          value: false
-        },
-        /**
-         * Bound to the input's `autofocus` attribute.
-         */
-        autofocus: {
-          type: Boolean,
-          value: false
-        },
-        /**
-         * Whether tags must be unique.
-         */
-        allowDuplicates: {
-          type: Boolean,
-          value: false
-        },
-        /**
-         * The paper-input-container's label when there are no tags.
-         */
-        label: String,
-        /**
-         * The paper-input-container's label.
-         */
-        tagLabel: String,
-        /**
-         * The minimum length of a tag.
-         */
-        minLength: Number,
-        /**
-         * The maximum length of a tag.
-         */
-        maxLength: Number,
-        _label: {
-          type: String,
-          computed: '_computeLabel(label, tagLabel, tags.length)'
-        }
-      },
+      /** Copy the Polymer 1.x fire implementation. */
+      _fire(name, data, options = {}) {
+        options.detail = data;
+        if (options.bubbles === undefined) options.bubbles = true;
+        if (options.composed === undefined) options.composed = true;
+        this.dispatchEvent(new CustomEvent(name, options));
+      }
 
       /**
        * Add a tag to the internal array.
        */
-      add: function(tag) {
+      add(tag) {
         if (tag
             && (!this.minLength || tag.length >= this.minLength)
             && (!this.maxLength || tag.length <= this.maxLength)
             && (this.allowDuplicates || !this.tags.includes(tag))) {
           this.push('tags', tag);
-          this.fire('tag-added', tag);
+          this._fire('tag-added', tag);
           return true;
         } else {
           if (this.tag == tag) this.$.input.invalid = true;
-          this.fire('tag-denied', tag);
+          this._fire('tag-denied', tag);
           return false;
         }
-      },
+      }
 
       /**
        * Remove a tag by index.
        */
-      remove: function(index) {
+      remove(index) {
         var removed = this.splice('tags', index, 1);
-        if (removed.length > 0) this.fire('tag-removed', removed[0]);
-      },
+        if (removed.length > 0) this._fire('tag-removed', removed[0]);
+      }
 
       /**
        * Insert tag at index.
        */
-      insert: function(index, tag) {
+      insert(index, tag) {
         if (tag
             && (!this.minLength || tag.length >= this.minLength)
             && (!this.maxLength || tag.length <= this.maxLength)
             && (this.allowDuplicates || !this.tags.includes(tag))) {
           this.splice('tags', index, 0, tag);
-          this.fire('tag-inserted', tag);
+          this._fire('tag-inserted', tag);
           return true;
         } else {
           if (this.tag == tag) this.$.input.invalid = true;
-          this.fire('tag-denied', tag);
+          this._fire('tag-denied', tag);
           return false;
         }
-      },
+      }
 
       /**
        * Give focus to the underlying input.
        */
-      focus: function() {
+      focus() {
         this.$.input.$.input.focus();
-      },
+      }
 
-      _removeTag: function(e) {
+      _removeTag(e) {
         // console.log('onremove', e, tag);
         this.remove(e.model.index);
         this.focus();
-      },
+      }
 
 
-      _onRemoveKeydown: function(e) {
+      _onRemoveKeydown(e) {
         if (e.keyCode === 13 || e.keyCode === 32) {  // enter or space
           this._removeTag(e);
         }
-      },
+      }
 
-      _onInputKeydown: function (e) {
+      _onInputKeydown (e) {
         // console.log('keydown:', e.key, e.keyCode, this._separatorKeyCode);
         this.$.input.invalid = false;
         if ((this.separator && this.separator === e.key)
@@ -228,9 +232,9 @@ Custom property | Description | Default
             this.focus();
           }
         }
-      },
+      }
 
-      _computeLabel: function(label, tagLabel, len) {
+      _computeLabel(label, tagLabel, len) {
         return len == 0 ? (label || tagLabel) : tagLabel;
       }
 
@@ -258,6 +262,7 @@ Custom property | Description | Default
         * @event tag-removed
         * @param {tag} string The tag that was removed.
         */
-    });
+    }
+    customElements.define(TagsInput.is, TagsInput);
   </script>
 </dom-module>

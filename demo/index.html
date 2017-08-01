@@ -11,6 +11,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../tags-input.html">
+    <link rel="import" href="../tags-input-list.html">
 
     <custom-style>
       <style include="demo-pages-shared-styles"></style>
@@ -23,6 +24,29 @@
         <template>
           <tags-input autofocus label="Tags" tag-label="Add tag"
             min-length="3" max-length="16"></tags-input>
+        </template>
+      </demo-snippet>
+
+      <h3>Default usage with list</h3>
+      <demo-snippet>
+        <template>
+          <tags-input-list id="List" autofocus label="Tags" tag-label="Add tag"></tags-input-list>
+            <script>
+              List.options = [
+                {
+                  value: 9,
+                  label: 'one',
+                },
+                {
+                  value: 10,
+                  label: 'two',
+                },
+                {
+                  value: 11,
+                  label: 'three',
+                },
+              ]
+            </script>
         </template>
       </demo-snippet>
 

@@ -1,7 +1,9 @@
 {
   "name": "tags-input",
   "description": "Input element for defining one or more tags.",
-  "authors": [ "Jacob Phillips (https://github.com/jifalops)"],
+  "authors": [
+    "Jacob Phillips (https://github.com/jifalops)"
+  ],
   "main": "tags-input.html",
   "license": "MIT",
   "keywords": [
@@ -16,7 +18,8 @@
     "iron-iconset-svg": "^2.0.0",
     "iron-flex-layout": "^2.0.0",
     "paper-input": "^2.0.0",
-    "iron-input": "^2.0.0"
+    "iron-input": "^2.0.0",
+    "vaadin-combo-box": "^2.0.0"
   },
   "devDependencies": {
     "iron-demo-helpers": "^2.0.0",

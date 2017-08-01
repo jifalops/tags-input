@@ -144,6 +144,10 @@ Custom property | Description | Default
         };
       }
 
+      get value() {
+        return this.tags;
+      }
+
       /** Copy the Polymer 1.x fire implementation. */
       _fire(name, data, options = {}) {
         options.detail = data;

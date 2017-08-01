@@ -5,6 +5,7 @@
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="tag-iconset.html">
+<link rel="import" href="tags-input-styles.html">
 
 <!--
 `tags-input`
@@ -23,34 +24,11 @@ Custom property | Description | Default
 
 <dom-module id="tags-input">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-      .container {
-        @apply --layout-vertical;
-        @apply --tags-container;
-      }
-      .tags {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        @apply --layout-wrap;
-      }
-      .tag {
-        padding: 1px 2px;
-        margin: 2px;
-        border: 1px solid #999;
-        @apply --tags-existing-tag;
-      }
-      #input {
-        @apply --tags-input;
-      }
-      iron-icon {
-        --iron-icon-height: var(--tags-remove-icon-size, 12px);
-        --iron-icon-width: var(--tags-remove-icon-size, 12px);
-        @apply --tags-remove-icon;
-      }
-    </style>
+    <custom-style>
+      <style include="tags-input-styles">
+        
+      </style>
+    </custom-style>
     <div class="container">
       <div class="tags">
         <template is="dom-repeat" items="[[tags]]" as="tag">

@@ -50,6 +50,22 @@
         </template>
       </demo-snippet>
 
+      <h3>Get tags array</h3>
+      <demo-snippet>
+        <template>
+          <tags-input id="tag" autofocus label="Tags" tag-label="Add tag"
+            min-length="3" max-length="16"></tags-input>
+          <button onclick="printValue()">Get value</button>
+          <div id="toprint"></div>
+          <script>
+            function printValue() {
+              const tagSelector = document.getElementById('tag');
+              document.getElementById('toprint').innerHTML = JSON.stringify(tagSelector.value);
+            }
+          </script>
+        </template>
+      </demo-snippet>
+
       <h3>Allow duplicates</h3>
       <demo-snippet>
         <template>

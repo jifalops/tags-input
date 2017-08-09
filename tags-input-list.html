@@ -8,27 +8,13 @@
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="tag-iconset.html">
 <link rel="import" href="tags-input-styles.html">
-
-<!--
-`tags-input-list`
-Input element for defining one or more tags.
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--tags-container` | Mixin for the overall container | `@apply --layout-vertical;`
-`--tags-input` | Mixin for the paper-input | ``
-`--tags-existing-tag` | Mixin for the each existing tag | ``
-`--tags-remove-icon-size` | Hight and width of the remove icon | `12px`
-`--tags-remove-icon` | Mixin applied to the icon | ``
-
-@demo demo/index.html
--->
+<link rel="import" href="tags-input.html">
 
 <dom-module id="tags-input-list">
   <template>
     <custom-style>
       <style include="tags-input-styles">
-        
+
       </style>
     </custom-style>
     <div class="container">
@@ -63,6 +49,14 @@ Custom property | Description | Default
   </template>
 
   <script>
+    /**
+     * `tags-input-list`
+     * Input element for defining one or more tags.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
     class TagsInputList extends TagsInput {
       static get is() { return 'tags-input-list'; }
       static get properties() {

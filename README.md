@@ -5,7 +5,9 @@ Input element for defining one or more tags.
 
 ## Installation
 ```
-bower install --save jifalops/tags-input
+bower i -S jifalops/tags-input        # Polymer 2.0 class based
+bower i -S jifalops/tags-input#0.4.0  # Polymer 2.0 hybrid (1.x compatible)
+bower i -S jifalops/tags-input#0.3.0  # Polymer 1.x based
 ```
 
 <!-- ## Usage -->
@@ -30,10 +32,9 @@ bower install --save jifalops/tags-input
 
 Full demo:
 [webcomponents.org](https://www.webcomponents.org/element/jifalops/tags-input/demo/demo/index.html)
-| [github](https://jifalops.github.io/tags-input/components/tags-input/demo/).
+| [github](https://jifalops.github.io/tags-input/components/tags-input/demo/)
 
 API: [webcomponents.org](https://www.webcomponents.org/element/jifalops/tags-input/tags-input)
-| [github](https://jifalops.github.io/tags-input).
 
 ## Contributing
 

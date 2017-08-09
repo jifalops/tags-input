@@ -1,13 +1,11 @@
 {
   "name": "tags-input",
   "description": "Input element for defining one or more tags.",
-  "authors": [
-    "Jacob Phillips (https://github.com/jifalops)"
-  ],
   "main": "tags-input.html",
+  "authors": [ "Jacob Phillips (https://github.com/jifalops) <jifalops@gmail.com>" ],
   "license": "MIT",
   "keywords": [
-    "web-components",
+    "polymer",
     "tag",
     "tags",
     "input"
